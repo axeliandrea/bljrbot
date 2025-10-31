@@ -38,6 +38,10 @@
       cursor: pointer;
     }
     .menu a:hover, .menu button:hover { background: #8b4ff7; }
+    #registerBtn:disabled {
+      background: #888;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -54,7 +58,7 @@
   </script>
 
   <div class="menu">
-    <button onclick="registerUser()">REGISTER</button>
+    <button id="registerBtn" onclick="registerUser()" disabled>LOGIN TELEGRAM DULU</button>
     <a href="https://t.me/fvckmmorpg_bot?start=yapping">YAPPING</a>
     <a href="https://t.me/fvckmmorpg_bot?start=store">STORE</a>
     <a href="https://t.me/fvckmmorpg_bot?start=catch">CATCH</a>
@@ -71,9 +75,14 @@
     // Fungsi dipanggil setelah user login via Telegram widget
     function onTelegramAuth(user) {
       telegramUser = user;
-      alert(`✅ Login berhasil!\nUsername: ${user.username}\nID: ${user.id}`);
-      // Simpan data di localStorage
       localStorage.setItem('telegramUser', JSON.stringify(user));
+
+      // Aktifkan tombol REGISTER dan tampilkan username
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = false;
+      btn.textContent = `REGISTER (${user.username})`;
+
+      console.log("Login berhasil:", user);
     }
 
     // Fungsi saat klik tombol Register
@@ -84,14 +93,20 @@
         return;
       }
 
-      // Kirim data user ke server (opsional, jika kamu punya backend)
-      console.log("User data:", user);
-
-      // Redirect ke bot Telegram
-      const botUsername = "fvckmmorpg_bot"; // tanpa @
-      const startParam = "register";
-      window.location.href = `https://t.me/fvckmmorpg_bot?start=${startParam}`;
+      // Redirect ke bot Telegram dengan start parameter register
+      window.location.href = `https://t.me/fvckmmorpg_bot?start=register`;
     }
+
+    // Jika user sudah login sebelumnya, aktifkan tombol otomatis
+    window.addEventListener('load', () => {
+      const savedUser = JSON.parse(localStorage.getItem('telegramUser'));
+      if (savedUser) {
+        telegramUser = savedUser;
+        const btn = document.getElementById('registerBtn');
+        btn.disabled = false;
+        btn.textContent = `REGISTER (${savedUser.username})`;
+      }
+    });
   </script>
 </body>
 </html>
