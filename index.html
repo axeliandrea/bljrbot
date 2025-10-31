@@ -17,7 +17,13 @@
     margin: 0;
     padding: 20px;
   }
-  h1 { text-align: center; }
+  h1 { text-align: center; margin-bottom: 5px; }
+  p { text-align: center; margin-bottom: 20px; }
+  #welcomeMsg {
+    margin-top: 15px;
+    font-size: 1rem;
+    color: #00ffcc;
+  }
   button {
     padding: 15px 25px;
     background: #5c2dc2;
@@ -36,10 +42,12 @@
 <h1>Selamat Datang di FVCK MMOPRG</h1>
 <p>Daftar menjadi player dengan Telegram</p>
 
-<button id="loginBtn">Masuk dengan Telegram</button>
+<button id="loginBtn">REGISTER dengan Telegram</button>
+
+<div id="welcomeMsg"></div>
 
 <script>
-  // Ambil query string dari URL untuk cek apakah user baru kembali dari Telegram OAuth
+  // Ambil query string dari URL
   function getQueryParams() {
     const params = {};
     window.location.search.substring(1).split("&").forEach(pair => {
@@ -51,10 +59,12 @@
 
   function handleOAuthReturn() {
     const params = getQueryParams();
-    // Telegram OAuth akan mengirim: id, first_name, username, hash
     if(params.id && params.username) {
-      alert(`✅ Selamat! User ID ${params.id} dengan username @${params.username} telah berhasil registrasi di game FVCK MMOPRG.`);
-      // Simpan data di localStorage (opsional)
+      const message = `✅ Selamat! User ID ${params.id} dengan username @${params.username} telah berhasil registrasi di game FVCK MMOPRG.`;
+      alert(message);
+      // Tampilkan juga di halaman
+      document.getElementById('welcomeMsg').textContent = message;
+      // Simpan data di localStorage
       localStorage.setItem('playerData', JSON.stringify({id: params.id, username: params.username}));
       // Bersihkan query string dari URL
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -62,14 +72,14 @@
   }
 
   document.getElementById('loginBtn').addEventListener('click', () => {
-    const bot_id = "8435004837"; // ganti sesuai bot kamu
+    const bot_id = "483286384"; // ganti sesuai bot kamu
     const origin = encodeURIComponent("https://axeliandrea.github.io");
     const return_to = encodeURIComponent("https://axeliandrea.github.io/bljrbot/");
     const url = `https://oauth.telegram.org/auth?bot_id=${bot_id}&origin=${origin}&embed=1&request_access=write&return_to=${return_to}`;
     window.location.href = url;
   });
 
-  // Panggil saat halaman di-load untuk cek jika user kembali dari Telegram OAuth
+  // Panggil saat halaman di-load untuk cek user kembali dari Telegram OAuth
   handleOAuthReturn();
 </script>
 
