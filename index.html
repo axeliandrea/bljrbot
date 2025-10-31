@@ -12,9 +12,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       margin: 0;
+      padding-top: 40px;
     }
     h1, p { text-align: center; }
     .menu {
@@ -45,7 +46,7 @@
       display: none; /* hidden sebelum login */
       flex-direction: column;
       align-items: center;
-      margin-bottom: 20px;
+      margin: 20px 0;
       animation: fadeIn 0.5s ease forwards;
     }
     #registerBtn {
@@ -75,20 +76,22 @@
   <h1>Selamat Datang di Game FVXK</h1>
   <p>MMORPG epik yang membawa kamu ke dunia fantasi!</p>
 
+  <!-- 🔹 Telegram Login Widget -->
+  <div id="telegramLoginWrapper" style="z-index:1000; position: relative;">
+    <script async src="https://telegram.org/js/telegram-widget.js?7"
+      data-telegram-login="fvckmmorpg_bot"
+      data-size="large"
+      data-userpic="false"
+      data-request-access="write"
+      data-onauth="onTelegramAuth(user)">
+    </script>
+  </div>
+
   <!-- 🔹 Container tombol REGISTER -->
   <div id="registerContainer">
     <button id="registerBtn" onclick="registerUser()">REGISTER</button>
     <div id="usernameTag"></div>
   </div>
-
-  <!-- 🔹 Telegram Login Widget -->
-  <script async src="https://telegram.org/js/telegram-widget.js?7"
-    data-telegram-login="fvckmmorpg_bot"
-    data-size="large"
-    data-userpic="false"
-    data-request-access="write"
-    data-onauth="onTelegramAuth(user)">
-  </script>
 
   <div class="menu">
     <a href="https://t.me/fvckmmorpg_bot?start=yapping">YAPPING</a>
@@ -117,6 +120,7 @@
       btn.textContent = "REGISTER";
 
       const usernameTag = document.getElementById('usernameTag');
+      usernameTag.style.opacity = "1";
       usernameTag.textContent = `@${user.username}`;
       
       console.log("Login berhasil:", user);
@@ -138,7 +142,9 @@
         telegramUser = savedUser;
         const container = document.getElementById('registerContainer');
         container.style.display = 'flex';
-        document.getElementById('usernameTag').textContent = `@${savedUser.username}`;
+        const usernameTag = document.getElementById('usernameTag');
+        usernameTag.style.opacity = "1";
+        usernameTag.textContent = `@${savedUser.username}`;
       }
     });
   </script>
