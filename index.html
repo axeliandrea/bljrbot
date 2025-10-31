@@ -22,7 +22,7 @@
       flex-direction: column;
       gap: 15px;
       width: 250px;
-      margin-top: 30px;
+      margin-top: 20px;
     }
     .menu a, .menu button {
       display: block;
@@ -37,16 +37,49 @@
       border: none;
       cursor: pointer;
     }
-    .menu a:hover, .menu button:hover { background: #8b4ff7; }
-    #registerBtn:disabled {
-      background: #888;
-      cursor: not-allowed;
+    .menu a:hover, .menu button:hover { 
+      background: #8b4ff7; 
+      transform: scale(1.05);
+    }
+    #registerContainer {
+      display: none; /* hidden sebelum login */
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    #registerBtn {
+      background: #ff9800;
+    }
+    #registerBtn:hover {
+      background: #ffc107;
+    }
+    #usernameTag {
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #00ffcc;
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
   <h1>Selamat Datang di Game FVXK</h1>
   <p>MMORPG epik yang membawa kamu ke dunia fantasi!</p>
+
+  <!-- 🔹 Container tombol REGISTER -->
+  <div id="registerContainer">
+    <button id="registerBtn" onclick="registerUser()">REGISTER</button>
+    <div id="usernameTag"></div>
+  </div>
 
   <!-- 🔹 Telegram Login Widget -->
   <script async src="https://telegram.org/js/telegram-widget.js?7"
@@ -58,7 +91,6 @@
   </script>
 
   <div class="menu">
-    <button id="registerBtn" onclick="registerUser()" disabled>LOGIN TELEGRAM DULU</button>
     <a href="https://t.me/fvckmmorpg_bot?start=yapping">YAPPING</a>
     <a href="https://t.me/fvckmmorpg_bot?start=store">STORE</a>
     <a href="https://t.me/fvckmmorpg_bot?start=catch">CATCH</a>
@@ -72,39 +104,41 @@
   <script>
     let telegramUser = null;
 
-    // Fungsi dipanggil setelah user login via Telegram widget
     function onTelegramAuth(user) {
       telegramUser = user;
       localStorage.setItem('telegramUser', JSON.stringify(user));
 
-      // Aktifkan tombol REGISTER dan tampilkan username
-      const btn = document.getElementById('registerBtn');
-      btn.disabled = false;
-      btn.textContent = `REGISTER (${user.username})`;
+      // Tampilkan container REGISTER
+      const container = document.getElementById('registerContainer');
+      container.style.display = 'flex';
 
+      // Update tombol dan username tag
+      const btn = document.getElementById('registerBtn');
+      btn.textContent = "REGISTER";
+
+      const usernameTag = document.getElementById('usernameTag');
+      usernameTag.textContent = `@${user.username}`;
+      
       console.log("Login berhasil:", user);
     }
 
-    // Fungsi saat klik tombol Register
     function registerUser() {
       const user = telegramUser || JSON.parse(localStorage.getItem('telegramUser'));
       if (!user) {
         alert("⚠️ Silakan login dengan Telegram dulu sebelum register.");
         return;
       }
-
-      // Redirect ke bot Telegram dengan start parameter register
       window.location.href = `https://t.me/fvckmmorpg_bot?start=register`;
     }
 
-    // Jika user sudah login sebelumnya, aktifkan tombol otomatis
+    // Cek jika user sudah login sebelumnya
     window.addEventListener('load', () => {
       const savedUser = JSON.parse(localStorage.getItem('telegramUser'));
       if (savedUser) {
         telegramUser = savedUser;
-        const btn = document.getElementById('registerBtn');
-        btn.disabled = false;
-        btn.textContent = `REGISTER (${savedUser.username})`;
+        const container = document.getElementById('registerContainer');
+        container.style.display = 'flex';
+        document.getElementById('usernameTag').textContent = `@${savedUser.username}`;
       }
     });
   </script>
