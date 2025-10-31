@@ -1,152 +1,77 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Halaman Utama FVXK</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1a1a1a;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding-top: 40px;
-    }
-    h1, p { text-align: center; }
-    .menu {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 250px;
-      margin-top: 20px;
-    }
-    .menu a, .menu button {
-      display: block;
-      padding: 12px 20px;
-      text-align: center;
-      text-decoration: none;
-      color: #fff;
-      background: #5c2dc2;
-      border-radius: 8px;
-      transition: 0.3s;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-    .menu a:hover, .menu button:hover { 
-      background: #8b4ff7; 
-      transform: scale(1.05);
-    }
-    #registerContainer {
-      display: none; /* hidden sebelum login */
-      flex-direction: column;
-      align-items: center;
-      margin: 20px 0;
-      animation: fadeIn 0.5s ease forwards;
-    }
-    #registerBtn {
-      background: #ff9800;
-    }
-    #registerBtn:hover {
-      background: #ffc107;
-    }
-    #usernameTag {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      color: #00ffcc;
-      opacity: 0;
-      animation: fadeInUp 0.5s forwards;
-    }
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
-    }
-    @keyframes fadeInUp {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FVCK MMOPRG - Register</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+  h1 { text-align: center; }
+  button {
+    padding: 15px 25px;
+    background: #5c2dc2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover { background: #8b4ff7; }
+</style>
 </head>
 <body>
-  <h1>Selamat Datang di Game FVXK</h1>
-  <p>MMORPG epik yang membawa kamu ke dunia fantasi!</p>
 
-  <!-- 🔹 Telegram Login Widget -->
-  <div id="telegramLoginWrapper" style="z-index:1000; position: relative;">
-    <script async src="https://telegram.org/js/telegram-widget.js?7"
-      data-telegram-login="fvckmmorpg_bot"
-      data-size="large"
-      data-userpic="false"
-      data-request-access="write"
-      data-onauth="onTelegramAuth(user)">
-    </script>
-  </div>
+<h1>Selamat Datang di FVCK MMOPRG</h1>
+<p>Daftar menjadi player dengan Telegram</p>
 
-  <!-- 🔹 Container tombol REGISTER -->
-  <div id="registerContainer">
-    <button id="registerBtn" onclick="registerUser()">REGISTER</button>
-    <div id="usernameTag"></div>
-  </div>
+<button id="loginBtn">Masuk dengan Telegram</button>
 
-  <div class="menu">
-    <a href="https://t.me/fvckmmorpg_bot?start=yapping">YAPPING</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=store">STORE</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=catch">CATCH</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=hasil">HASIL TANGKAPAN</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=login">LOGIN CHECK IN</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=treasure">TREASURE CHEST</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=evolve">EVOLVE</a>
-    <a href="https://t.me/fvckmmorpg_bot?start=transfer">TRANSFER MONSTER</a>
-  </div>
-
-  <script>
-    let telegramUser = null;
-
-    function onTelegramAuth(user) {
-      telegramUser = user;
-      localStorage.setItem('telegramUser', JSON.stringify(user));
-
-      // Tampilkan container REGISTER
-      const container = document.getElementById('registerContainer');
-      container.style.display = 'flex';
-
-      // Update tombol dan username tag
-      const btn = document.getElementById('registerBtn');
-      btn.textContent = "REGISTER";
-
-      const usernameTag = document.getElementById('usernameTag');
-      usernameTag.style.opacity = "1";
-      usernameTag.textContent = `@${user.username}`;
-      
-      console.log("Login berhasil:", user);
-    }
-
-    function registerUser() {
-      const user = telegramUser || JSON.parse(localStorage.getItem('telegramUser'));
-      if (!user) {
-        alert("⚠️ Silakan login dengan Telegram dulu sebelum register.");
-        return;
-      }
-      window.location.href = `https://t.me/fvckmmorpg_bot?start=register`;
-    }
-
-    // Cek jika user sudah login sebelumnya
-    window.addEventListener('load', () => {
-      const savedUser = JSON.parse(localStorage.getItem('telegramUser'));
-      if (savedUser) {
-        telegramUser = savedUser;
-        const container = document.getElementById('registerContainer');
-        container.style.display = 'flex';
-        const usernameTag = document.getElementById('usernameTag');
-        usernameTag.style.opacity = "1";
-        usernameTag.textContent = `@${savedUser.username}`;
-      }
+<script>
+  // Ambil query string dari URL untuk cek apakah user baru kembali dari Telegram OAuth
+  function getQueryParams() {
+    const params = {};
+    window.location.search.substring(1).split("&").forEach(pair => {
+      const [key, value] = pair.split("=");
+      if(key) params[decodeURIComponent(key)] = decodeURIComponent(value || '');
     });
-  </script>
+    return params;
+  }
+
+  function handleOAuthReturn() {
+    const params = getQueryParams();
+    // Telegram OAuth akan mengirim: id, first_name, username, hash
+    if(params.id && params.username) {
+      alert(`✅ Selamat! User ID ${params.id} dengan username @${params.username} telah berhasil registrasi di game FVCK MMOPRG.`);
+      // Simpan data di localStorage (opsional)
+      localStorage.setItem('playerData', JSON.stringify({id: params.id, username: params.username}));
+      // Bersihkan query string dari URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const bot_id = "8435004837"; // ganti sesuai bot kamu
+    const origin = encodeURIComponent("https://axeliandrea.github.io");
+    const return_to = encodeURIComponent("https://axeliandrea.github.io/bljrbot/");
+    const url = `https://oauth.telegram.org/auth?bot_id=${bot_id}&origin=${origin}&embed=1&request_access=write&return_to=${return_to}`;
+    window.location.href = url;
+  });
+
+  // Panggil saat halaman di-load untuk cek jika user kembali dari Telegram OAuth
+  handleOAuthReturn();
+</script>
+
 </body>
 </html>
